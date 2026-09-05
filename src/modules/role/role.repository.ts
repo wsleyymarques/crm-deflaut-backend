@@ -8,12 +8,8 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 export class RoleRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get prismaClient(): any {
-    return this.prisma as any;
-  }
-
   async create(createRoleDto: CreateRoleDto) {
-    return this.prismaClient.role.create({
+    return this.prisma.role.create({
       data: createRoleDto,
     });
   }
@@ -22,13 +18,13 @@ export class RoleRepository {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const [roles, total] = await this.prismaClient.$transaction([
-      this.prismaClient.role.findMany({
+    const [roles, total] = await this.prisma.$transaction([
+      this.prisma.role.findMany({
         skip,
         take: Number(limit),
         orderBy: { name: 'asc' },
       }),
-      this.prismaClient.role.count(),
+      this.prisma.role.count(),
     ]);
 
     return {
@@ -43,26 +39,26 @@ export class RoleRepository {
   }
 
   async findById(id: string) {
-    return this.prismaClient.role.findUnique({
+    return this.prisma.role.findUnique({
       where: { id },
     });
   }
 
   async findByName(name: string) {
-    return this.prismaClient.role.findUnique({
+    return this.prisma.role.findUnique({
       where: { name },
     });
   }
 
   async update(id: string, updateRoleDto: UpdateRoleDto) {
-    return this.prismaClient.role.update({
+    return this.prisma.role.update({
       where: { id },
       data: updateRoleDto,
     });
   }
 
   async remove(id: string) {
-    await this.prismaClient.role.delete({
+    await this.prisma.role.delete({
       where: { id },
     });
   }

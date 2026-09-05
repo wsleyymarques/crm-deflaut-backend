@@ -8,10 +8,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get prismaClient(): any {
-    return this.prisma as any;
-  }
-
   private readonly userSafeSelect = {
     id: true,
     name: true,
@@ -21,7 +17,7 @@ export class UserRepository {
   };
 
   async create(createUserDto: CreateUserDto, hashedPassword) {
-    return this.prismaClient.user.create({
+    return this.prisma.user.create({
       data: {
         name: createUserDto.name,
         email: createUserDto.email,
@@ -35,14 +31,14 @@ export class UserRepository {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
-    const [users, total] = await this.prismaClient.$transaction([
-      this.prismaClient.user.findMany({
+    const [users, total] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
         select: this.userSafeSelect,
         skip,
         take: Number(limit),
         orderBy: { createdAt: 'desc' },
       }),
-      this.prismaClient.user.count(),
+      this.prisma.user.count(),
     ]);
 
     return {
@@ -57,33 +53,33 @@ export class UserRepository {
   }
 
   async findById(id: string) {
-    return this.prismaClient.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
       select: this.userSafeSelect,
     });
   }
 
   async findByIdWithPassword(id: string) {
-    return this.prismaClient.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
     });
   }
 
   async findByEmail(email: string) {
-    return this.prismaClient.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { email },
       select: this.userSafeSelect,
     });
   }
 
   async findByEmailWithPassword(email: string) {
-    return this.prismaClient.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { email },
     });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaClient.user.update({
+    return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
       select: this.userSafeSelect,
@@ -91,7 +87,7 @@ export class UserRepository {
   }
 
   async updatePassword(id: string, newHash: string): Promise<void> {
-    await this.prismaClient.user.update({
+    await this.prisma.user.update({
       where: { id },
       data: {
         hashedPassword: newHash,
@@ -100,7 +96,7 @@ export class UserRepository {
   }
 
   async remove(id: string): Promise<void> {
-    await this.prismaClient.user.delete({
+    await this.prisma.user.delete({
       where: { id },
     });
   }

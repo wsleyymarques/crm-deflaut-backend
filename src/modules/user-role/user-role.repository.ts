@@ -6,12 +6,8 @@ import { CreateUserRoleDto } from './dto/create-user-role.dto';
 export class UserRoleRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get prismaClient(): any {
-    return this.prisma as any;
-  }
-
   async create(createUserRoleDto: CreateUserRoleDto) {
-    return this.prismaClient.userRole.create({
+    return this.prisma.userRole.create({
       data: createUserRoleDto,
     });
   }
@@ -23,7 +19,7 @@ export class UserRoleRepository {
    * @returns A promise that resolves to an array of UserRole objects, with the related Role object included.
    */
   async findRolesByUserId(userId: string) {
-    return this.prismaClient.userRole.findMany({
+    return this.prisma.userRole.findMany({
       where: { userId },
       include: {
         role: true, // Include the full Role object
@@ -32,7 +28,7 @@ export class UserRoleRepository {
   }
 
   async findByUserIdAndRoleId(userId: string, roleId: string) {
-    return this.prismaClient.userRole.findUnique({
+    return this.prisma.userRole.findUnique({
       where: {
         userId_roleId: {
           userId,
@@ -43,19 +39,19 @@ export class UserRoleRepository {
   }
 
   async findUserRolesByUserId(userId: string) {
-    return this.prismaClient.userRole.findMany({
+    return this.prisma.userRole.findMany({
       where: { userId },
     });
   }
 
   async findById(id: string) {
-    return this.prismaClient.userRole.findUnique({
+    return this.prisma.userRole.findUnique({
       where: { id },
     });
   }
 
   async remove(id: string) {
-    await this.prismaClient.userRole.delete({
+    await this.prisma.userRole.delete({
       where: { id },
     });
   }

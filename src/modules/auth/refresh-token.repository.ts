@@ -5,12 +5,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class RefreshTokenRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get prismaClient(): any {
-    return this.prisma as any;
-  }
-
   async create(tokenHash: string, userId: string, expiresAt: Date) {
-    return this.prismaClient.refreshToken.create({
+    return this.prisma.refreshToken.create({
       data: {
         tokenHash,
         userId,
@@ -20,19 +16,19 @@ export class RefreshTokenRepository {
   }
 
   async findByTokenHash(tokenHash: string) {
-    return this.prismaClient.refreshToken.findUnique({
+    return this.prisma.refreshToken.findUnique({
       where: { tokenHash },
     });
   }
 
   async delete(id: string) {
-    return this.prismaClient.refreshToken.delete({
+    return this.prisma.refreshToken.delete({
       where: { id },
     });
   }
 
   async deleteAllByUserId(userId: string) {
-    return this.prismaClient.refreshToken.deleteMany({
+    return this.prisma.refreshToken.deleteMany({
       where: { userId },
     });
   }

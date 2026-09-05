@@ -24,9 +24,11 @@ export class ValidationExceptionFilter implements ExceptionFilter {
       mensagem = 'Erro de validação nos dados enviados';
     }
 
-    const errorResponse = new ApiResponse(mensagem, null);
+    const errorResponse = new ApiResponse<{ errors: Record<string, string[]> }>(
+      mensagem,
+      { errors },
+    );
     errorResponse.sucesso = false;
-    errorResponse.dados = { errors };
     errorResponse.statusCode = status;
 
     response.status(status).json(errorResponse);

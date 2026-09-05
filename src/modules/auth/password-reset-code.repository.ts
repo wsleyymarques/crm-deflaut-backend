@@ -5,12 +5,8 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class PasswordResetCodeRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get prismaClient(): any {
-    return this.prisma as any;
-  }
-
   async create(codeHash: string, userId: string, expiresAt: Date) {
-    return this.prismaClient.passwordResetCode.create({
+    return this.prisma.passwordResetCode.create({
       data: {
         codeHash,
         userId,
@@ -20,14 +16,14 @@ export class PasswordResetCodeRepository {
   }
 
   async findLatestByUserId(userId: string) {
-    return this.prismaClient.passwordResetCode.findFirst({
+    return this.prisma.passwordResetCode.findFirst({
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
   }
 
   async incrementAttempts(id: string) {
-    return this.prismaClient.passwordResetCode.update({
+    return this.prisma.passwordResetCode.update({
       where: { id },
       data: {
         attempts: {
@@ -38,13 +34,13 @@ export class PasswordResetCodeRepository {
   }
 
   async delete(id: string) {
-    return this.prismaClient.passwordResetCode.delete({
+    return this.prisma.passwordResetCode.delete({
       where: { id },
     });
   }
 
   async deleteAllByUserId(userId: string) {
-    return this.prismaClient.passwordResetCode.deleteMany({
+    return this.prisma.passwordResetCode.deleteMany({
       where: { userId },
     });
   }

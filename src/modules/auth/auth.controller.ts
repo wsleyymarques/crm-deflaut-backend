@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { Public } from '../../common/decorators/public.decorator';
 import { ApiResponse } from '../../common/responses/api-response';
 import { AuthService } from './auth.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -27,6 +28,7 @@ export class AuthController {
       ttl: 60000,
     },
   })
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: LoginDto) {
@@ -40,6 +42,7 @@ export class AuthController {
       ttl: 60000,
     },
   })
+  @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
@@ -61,6 +64,7 @@ export class AuthController {
       ttl: 60000,
     },
   })
+  @Public()
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
@@ -76,6 +80,7 @@ export class AuthController {
       ttl: 60000,
     },
   })
+  @Public()
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
