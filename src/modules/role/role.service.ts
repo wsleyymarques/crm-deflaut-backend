@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ListQueryDto } from 'src/common/dto/list-query.dto';
+import { ListQueryDto } from '../../common/dto/list-query.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleMapper } from './role.mapper';
